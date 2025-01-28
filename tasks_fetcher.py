@@ -1,3 +1,4 @@
+from googleapiclient.discovery import build
 import os
 import json
 
@@ -7,7 +8,8 @@ def fetch_tasks(creds):
     tasks = tasks_result.get('items', [])
 
     # Output folder path
-    output_folder = 'output'
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_folder = os.path.join(script_dir, 'output')
     output_file = os.path.join(output_folder, 'tasks.json')
 
     # Ensure the output folder exists
