@@ -1,11 +1,20 @@
-from googleapiclient.discovery import build
+import os
+import json
 
 def fetch_tasks(creds):
-    service = build('tasks', 'v1', credentials=creds)
-    tasklists = service.tasklists().list().execute()
+    service = build("tasks", "v1", credentials=creds)
+    tasks_result = service.tasks().list(tasklist='@default').execute()
+    tasks = tasks_result.get('items', [])
 
-    for tasklist in tasklists.get('items', []):
-        print(f"\nTask List: {tasklist['title']}")
-        tasks = service.tasks().list(tasklist=tasklist['id']).execute()
-        for task in tasks.get('items', []):
-            print(f"  - {task['title']} (Status: {task['status']})")
+    # Output folder path
+    output_folder = 'output'
+    output_file = os.path.join(output_folder, 'tasks.json')
+
+    # Ensure the output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Write tasks to JSON file
+    with open(output_file, 'w') as f:
+        json.dump(tasks, f, indent=4)
+
+    print(f"Tasks saved to {output_file}")

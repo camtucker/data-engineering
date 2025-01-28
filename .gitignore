@@ -2,6 +2,10 @@
 credentials.json
 token.json
 
+#Output folder
+output/*
+!output/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
