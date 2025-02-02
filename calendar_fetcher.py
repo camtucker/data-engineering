@@ -2,19 +2,32 @@ from googleapiclient.discovery import build
 import os
 import json
 
+
 def fetch_calendar_events(creds):
     try:
         # Build the service
         service = build("calendar", "v3", credentials=creds)
+        all_events = []
+        page_token = None
 
-        # Fetch events
-        events_result = service.events().list(
-            calendarId='primary', maxResults=10, singleEvents=True, orderBy='startTime'
-        ).execute()
-        events = events_result.get('items', [])
+        while True:
+            events_result = service.events().list(
+                calendarId='primary',
+                singleEvents=True,
+                orderBy='startTime',
+                pageToken=page_token
+            ).execute()
 
-        # Debug: Check if events are fetched
-        print(f"Fetched {len(events)} events")
+            # Fetch events
+            events = events_result.get('items', [])
+            all_events.extend(events)
+
+            # Debug: Check if events are fetched
+            print(f"Fetched {len(all_events)} events so far")
+
+            page_token = events_result.get('nextPageToken')
+            if not page_token:
+                break
 
         # Get script directory and define output folder
         script_dir = os.path.dirname(os.path.abspath(__file__))
