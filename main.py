@@ -9,8 +9,8 @@ if __name__ == '__main__':
     ]
     creds = authenticate_google('token.json', SCOPES)
 
-    print("Fetching Google Calendar events...")
-    fetch_calendar_events(creds)
+#    print("Fetching Google Calendar events...")
+ #   fetch_calendar_events(creds)
 
     print("\nFetching Google Tasks...")
     fetch_tasks(creds)
